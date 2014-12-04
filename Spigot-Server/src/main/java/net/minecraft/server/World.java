@@ -58,7 +58,7 @@ public abstract class World implements IBlockAccess {
     };
     // Spigot end
     protected List f = new ArrayList();
-    public Set tileEntityList = new HashSet(); // CraftBukkit - ArrayList -> HashSet
+    public Set tileEntityList = new org.spigotmc.WorldTileEntityList(this); // Spigot - Optimized Tile Entity Ticking
     private List a = new ArrayList();
     private List b = new ArrayList();
     public List players = new ArrayList();

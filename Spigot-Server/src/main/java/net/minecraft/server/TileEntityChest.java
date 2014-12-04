@@ -251,11 +251,11 @@ public class TileEntityChest extends TileEntity implements IInventory {
     public void h() {
         super.h();
         if (this.world == null) return; // CraftBukkit
-        this.i();
+        this.i(); // Spigot - Update sendSounds if this renames
         ++this.ticks;
         float f;
 
-        if (!this.world.isStatic && this.o != 0 && (this.ticks + this.x + this.y + this.z) % 200 == 0) {
+        if (!this.world.isStatic && this.o != 0 && this.ticks % 10 == 0) { // Spigot Reduced 200 -> 10 interval due to reduced tick rate from Improved Tick Handling and removed the xyz as its already done for us.
             this.o = 0;
             f = 5.0F;
             List list = this.world.a(EntityHuman.class, AxisAlignedBB.a((double) ((float) this.x - f), (double) ((float) this.y - f), (double) ((float) this.z - f), (double) ((float) (this.x + 1) + f), (double) ((float) (this.y + 1) + f), (double) ((float) (this.z + 1) + f)));
@@ -273,9 +273,13 @@ public class TileEntityChest extends TileEntity implements IInventory {
                 }
             }
         }
-
+    }
+    // Spigot start
+    private void sendSounds() {
+        this.i(); // called in the tick function
+       // Spigot end
         this.n = this.m;
-        f = 0.1F;
+        float f = 0.1F; // Spigot
         double d0;
 
         if (this.o > 0 && this.m == 0.0F && this.i == null && this.k == null) {
@@ -293,7 +297,7 @@ public class TileEntityChest extends TileEntity implements IInventory {
             this.world.makeSound(d1, (double) this.y + 0.5D, d0, "random.chestopen", 0.5F, this.world.random.nextFloat() * 0.1F + 0.9F);
         }
 
-        if (this.o == 0 && this.m > 0.0F || this.o > 0 && this.m < 1.0F) {
+        if (this.o == 0 && this.i == null && this.k == null) {
             float f1 = this.m;
 
             if (this.o > 0) {
@@ -308,7 +312,7 @@ public class TileEntityChest extends TileEntity implements IInventory {
 
             float f2 = 0.5F;
 
-            if (this.m < f2 && f1 >= f2 && this.i == null && this.k == null) {
+           if (/*this.m < f2 && f1 >= f2 && */this.i == null && this.k == null) { // Spigot removed buggy close sound checks
                 d0 = (double) this.x + 0.5D;
                 double d2 = (double) this.z + 0.5D;
 
@@ -348,7 +352,8 @@ public class TileEntityChest extends TileEntity implements IInventory {
         ++this.o;
         if (this.world == null) return; // CraftBukkit
         this.world.playBlockAction(this.x, this.y, this.z, this.q(), 1, this.o);
-
+        sendSounds(); // Spigot
+        
         // CraftBukkit start - Call redstone event
         if (this.q() == Blocks.TRAPPED_CHEST) {
             int newPower = Math.max(0, Math.min(15, this.o));
@@ -370,7 +375,8 @@ public class TileEntityChest extends TileEntity implements IInventory {
             --this.o;
             if (this.world == null) return; // CraftBukkit
             this.world.playBlockAction(this.x, this.y, this.z, this.q(), 1, this.o);
-
+            sendSounds(); // Spigot
+            
             // CraftBukkit start - Call redstone event
             if (this.q() == Blocks.TRAPPED_CHEST) {
                 int newPower = Math.max(0, Math.min(15, this.o));

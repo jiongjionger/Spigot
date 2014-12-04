@@ -173,7 +173,7 @@ public class TileEntityFurnace extends TileEntity implements IWorldInventory {
         if (this.isBurning() && this.canBurn()) {
             this.cookTime += elapsedTicks;
             if (this.cookTime >= 200) {
-                this.cookTime %= 200;
+                this.cookTime -= 200; // Spigot
                 this.burn();
                 flag1 = true;
             }

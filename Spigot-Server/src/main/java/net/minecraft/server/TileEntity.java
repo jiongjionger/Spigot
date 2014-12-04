@@ -56,6 +56,14 @@ public class TileEntity {
             }
         }
     }
+    
+    // Optimized TileEntity Tick changes
+    private static int tileEntityCounter = 0;
+    public final int tileId = tileEntityCounter++;
+    public final int tickInterval = org.spigotmc.WorldTileEntityList.initializeInterval(this);
+    public final int bucketId = tileId % tickInterval;
+    public org.spigotmc.WorldTileEntityList.TileEntityBucketedMap tickBucket;
+
     // Spigot end
 
     public TileEntity() {}
@@ -100,6 +108,7 @@ public class TileEntity {
         }
     }
 
+    public void tick() { h(); } // Spigot - obfuscation helper
     public void h() {}
 
     public static TileEntity c(NBTTagCompound nbttagcompound) {
